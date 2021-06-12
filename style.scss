@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.chess {
+    margin: 50px;
+}
+
+.chess__line {
+    display: flex;
+}
+
+.chess__box {
+    border: 1px solid black;
+    height: 62px;
+    width: 62px;
+    box-sizing: border-box;
+}
+
+.chess__box_black {
+    background-color: black;
+}
+
+.chess__box_num-let {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// каталог
+
+.catalog{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.item {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.image {
+    width: 500px;
+    height: 650px;
+}
+
+.name {
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.description {
+    font-size: 20px;
+    padding: 15px 0;
+}
+
+.price {
+    color: red;
+    font-size: 20px;
+}
