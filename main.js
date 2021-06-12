@@ -62,9 +62,9 @@ function countBasketPrice(arr) {
         sum_q += prod.quantity;
     }
     if (arr.length === 0) {
-        cart.textContent = 'Корзина пуста';
+        return cart.textContent = 'Корзина пуста';
     } else {
-        cart.textContent = 'В корзине: ' + sum_q + ' товаров на сумму ' + sum_p + ' рублей';
+        return cart.textContent = 'В корзине: ' + sum_q + ' товаров на сумму ' + sum_p + ' рублей';
     }
 }
 
@@ -92,7 +92,7 @@ const catalog_item = [
     new Catalog('img/photo-6.jpg', 'socks', 'socks description', 990)
 ];
 
-for (let i = 0; i < 6; i++) {
+for (let i of catalog_item) {
     let item = document.createElement('div');
     catalog.appendChild(item);
     item.classList.add('item');
@@ -100,20 +100,20 @@ for (let i = 0; i < 6; i++) {
     let image = document.createElement('img');
     item.appendChild(image);
     image.classList.add('image');
-    image.setAttribute('src', catalog_item[i].img);
+    image.setAttribute('src', i.img);
 
     let name = document.createElement('p');
     item.appendChild(name);
     name.classList.add('name');
-    name.textContent = catalog_item[i].name;
+    name.textContent = i.name;
 
     let description = document.createElement('p');
     item.appendChild(description);
     description.classList.add('description');
-    description.textContent = catalog_item[i].description;
+    description.textContent = i.description;
 
     let price = document.createElement('p');
     item.appendChild(price);
     price.classList.add('price');
-    price.textContent = catalog_item[i].price;
+    price.textContent = i.price;
 }
