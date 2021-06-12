@@ -97,23 +97,12 @@ for (let i of catalog_item) {
     catalog.appendChild(item);
     item.classList.add('item');
 
-    let image = document.createElement('img');
-    item.appendChild(image);
-    image.classList.add('image');
-    image.setAttribute('src', i.img);
 
-    let name = document.createElement('p');
-    item.appendChild(name);
-    name.classList.add('name');
-    name.textContent = i.name;
+    item.insertAdjacentHTML('afterbegin', '<img class="image" src="' + i.img + '"></img>');
 
-    let description = document.createElement('p');
-    item.appendChild(description);
-    description.classList.add('description');
-    description.textContent = i.description;
+    item.insertAdjacentHTML('beforeend', '<p class="name">' + i.name + '</p>');
 
-    let price = document.createElement('p');
-    item.appendChild(price);
-    price.classList.add('price');
-    price.textContent = i.price;
+    item.insertAdjacentHTML('beforeend', '<p class="description">' + i.description + '</p>');
+
+    item.insertAdjacentHTML('beforeend', '<p class="price">' + i.price + '</p>');
 }
