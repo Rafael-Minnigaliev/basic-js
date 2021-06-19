@@ -31,22 +31,37 @@
 
 // каталог
 
+.cart {
+    display: flex; 
+    justify-content: flex-end; 
+    margin: 40px 100px 50px 20px; 
+    font-size: 20px;
+}
+
 .catalog{
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
 }
 
 .item {
     border: 1px solid black;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
-    margin-bottom: 30px;
+    margin: 15px;    
+    position: relative;
+}
+
+.fas{
+    font-size: 40px;
+    color: #fff;
+    top: 450px;
+    left: 450px;
+    position: absolute;
 }
 
 .image {
     width: 500px;
-    height: 650px;
+    height: 500px;
 }
 
 .name {
@@ -56,10 +71,55 @@
 
 .description {
     font-size: 20px;
-    padding: 15px 0;
+    padding: 10px 0;
 }
 
 .price {
     color: red;
     font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.gallery {
+    display: flex;
+    justify-content: space-between;
+}
+
+.gallery_img{
+    width: 100px;
+    height: 100px;
+}
+
+.popup_gallery{
+    width: 1100px;
+    height: 800px;
+    top: 50px;
+    left: calc(50% - 550px);
+    position: fixed;
+    background-color: rgb(161, 161, 161);
+    display: none;
+    padding: 0 40px;
+    z-index: 1;
+}
+
+.popup_img{
+    width: 500px;
+    height: 700px;
+    position: absolute;
+    top: 50px;
+    left: calc(50% - 250px);
+    display: none;
+}
+
+.slider {
+    margin-top: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.close{
+    position: absolute;
+    top: 15px;
+    left: 1140px;
 }

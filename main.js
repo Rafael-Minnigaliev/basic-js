@@ -1,57 +1,82 @@
 'use strict'
 
-//1. Шахматная доска
+const $cart = document.querySelector('.cart');
+const $catalog = document.querySelector('.catalog');
 
-const chess = document.querySelector('.chess');
 
-const arrEN = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+function getIDCounter() {
+    let ID = 1;
+    return function () {
+        return ID++;
+    }
+}
 
-for (let i = 0; i < 9; i++) {
-    let x = document.createElement('div');
-    chess.appendChild(x);
-    x.classList.add('chess__line');
+let ProductID = getIDCounter();
+let cartID = getIDCounter();
 
-    for (let k = 0; k < 9; k++) {
-        let y = document.createElement('div');
-        x.appendChild(y);
-        y.classList.add('chess__box');
+let cart = [];
+let products = [];
 
-        if (i === 0) {
-            y.textContent = arrEN[k - 1];
-            y.classList.add('chess__box_num-let');
-        } else if (k === 0 && i !== 0) {
-            y.textContent = i;
-            y.classList.add('chess__box_num-let');
-        } else {
-            if (k % 2 === 0 && i % 2 === 0 || k % 2 !== 0 && i % 2 !== 0)
-                y.classList.add('chess__box_black');
-        }
+
+function Product(name, price, quantity) {
+    this.id = ProductID();
+    this.name = name;
+    this.price = price;
+    this.quantity = quantity;
+}
+
+function Catalog(img, name, description, price, quantity) {
+    this.id = cartID();
+    this.img = img;
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.quantity = quantity;
+}
+
+
+function fetchProduct() {
+    cart = [
+        new Catalog('img/photo-1.jpg', 'jercy', 'jercy description', 1800, 1),
+        new Catalog('img/photo-2.jpg', 'cap', 'cap description', 1200, 1),
+        new Catalog('img/photo-3.jpg', 'blouse', 'blouse description', 1500, 1),
+        new Catalog('img/photo-4.jpg', 'trousers', 'trousers description', 1200, 1),
+        new Catalog('img/photo-5.jpg', 'sneakers', 'sneakers description', 5000, 1),
+        new Catalog('img/photo-6.jpg', 'socks', 'socks description', 990, 1)
+    ];
+}
+
+fetchProduct();
+
+
+function addToCart(id) {
+    for (let good of cart) {
+        if (good.id === id)
+            products.push(new Product(good.name, good.price, good.quantity));
     }
 }
 
 
-
-//2. Корзина
-
-const cart = document.querySelector('.cart');
-cart.style.cssText = 'display: flex; justify-content: flex-end; margin: 20px 100px 50px 20px; font-size: 20px;';
-
-function Product(name, price, quantity, color, size,) {
-    this.name = name;
-    this.price = price;
-    this.quantity = quantity;
-    this.color = color;
-    this.size = size;
+for (let i of cart) {
+    let html = `<div class="item">
+            <img class="image" src="${i.img}" data-idx=${i.id}>
+            <i class="fas fa-search-plus"></i>
+        <div class="btn">
+            <p class="name"> ${i.name} </p>
+            <p class="description"> ${i.description} </p>
+            <p class="price"> ${i.price} </p>
+            <button class="button" data-id=${i.id}>В корзину</button>
+        </div>
+    </div >`;
+    $catalog.insertAdjacentHTML('beforeend', html);
 }
 
-const products = [
-    new Product('jersey', 1800, 1, 'white', 'xl'),
-    new Product('cap', 1200, 2, 'red', 'l'),
-    new Product('blouse', 1500, 2, 'dark blue', 'xl'),
-    new Product('trousers', 1200, 2, 'black', 'l'),
-    new Product('sneakers', 5000, 1, 'black and white', 42),
-    new Product('socks', 990, 3, 'white', 42)
-];
+
+$catalog.addEventListener('click', function (e) {
+    addToCart(Number(e.target.getAttribute('data-id')));
+    countBasketPrice(products);
+});
+
 
 function countBasketPrice(arr) {
     let sum_p = 0;
@@ -61,48 +86,93 @@ function countBasketPrice(arr) {
         sum_p += prod.price * prod.quantity;
         sum_q += prod.quantity;
     }
+    $cart.textContent = '';
     if (arr.length === 0) {
-        return cart.textContent = 'Корзина пуста';
+        return $cart.textContent = 'Корзина пуста';
     } else {
-        return cart.textContent = 'В корзине: ' + sum_q + ' товаров на сумму ' + sum_p + ' рублей';
+        return $cart.textContent = 'В корзине: ' + sum_q + ' товаров на сумму ' + sum_p + ' рублей';
     }
 }
 
 countBasketPrice(products);
 
+//Галаерея
+
+const $popup_gallery = document.querySelector('.popup_gallery');
+const $close = $popup_gallery.querySelector('.close');
+const $previous = $popup_gallery.querySelector('.previous');
+const $next = $popup_gallery.querySelector('.next');
+const $image = $catalog.querySelectorAll('.image');
 
 
-//3*. Каталог
+const gallery_image = [
+    ['img/photo-1.jpg', 'img/photo-2.jpg', 'img/photo-6.jpg'],
+    ['img/photo-2.jpg', 'img/photo-1.jpg', 'img/photo-5.jpg'],
+    ['img/photo-3.jpg', 'img/photo-5.jpg', 'img/photo-4.jpg'],
+    ['img/photo-4.jpg', 'img/photo-6.jpg', 'img/photo-3.jpg'],
+    ['img/photo-5.jpg', 'img/photo-3.jpg', 'img/photo-2.jpg'],
+    ['img/photo-6.jpg', 'img/photo-4.jpg', 'img/photo-1.jpg']
+]
 
-const catalog = document.querySelector('.catalog');
 
-function Catalog(img, name, description, price) {
-    this.img = img;
-    this.name = name;
-    this.description = description;
-    this.price = price;
+for (let img of $image) {
+    img.addEventListener('click', function (e) {
+        getGallery(gallery_image, Number(e.target.getAttribute('data-idx')));
+    })
 }
 
-const catalog_item = [
-    new Catalog('img/photo-1.jpg', 'jercy', 'jercy description', 1800),
-    new Catalog('img/photo-2.jpg', 'cap', 'cap description', 1200),
-    new Catalog('img/photo-3.jpg', 'blouse', 'blouse description', 1500),
-    new Catalog('img/photo-4.jpg', 'trousers', 'trousers description', 1200),
-    new Catalog('img/photo-5.jpg', 'sneakers', 'sneakers description', 5000),
-    new Catalog('img/photo-6.jpg', 'socks', 'socks description', 990)
-];
 
-for (let i of catalog_item) {
-    let item = document.createElement('div');
-    catalog.appendChild(item);
-    item.classList.add('item');
+function getGallery(e, y) {
+    $popup_gallery.lastChild.remove();
 
+    const PopImg = e[y - 1].map(function (img) {
+        return `<img class="popup_img" src="${img}" />`
+    }).join(' ');
 
-    item.insertAdjacentHTML('afterbegin', '<img class="image" src="' + i.img + '"></img>');
+    const htmlPop = `<div class="slider">
+    <button class="previous">←-</button>
+        <div class="slide">
+            ${PopImg}
+        </div>
+    <button class="next">-→</button>
+    </div>`
+    $popup_gallery.insertAdjacentHTML('beforeend', htmlPop)
+    $popup_gallery.style.display = 'block';
 
-    item.insertAdjacentHTML('beforeend', '<p class="name">' + i.name + '</p>');
-
-    item.insertAdjacentHTML('beforeend', '<p class="description">' + i.description + '</p>');
-
-    item.insertAdjacentHTML('beforeend', '<p class="price">' + i.price + '</p>');
+    Slider($popup_gallery.querySelector('.slider'), 0);
 }
+
+
+function Slider($slider, start) {
+    let currentSlide = start;
+    let img = $slider.querySelectorAll('.popup_img');
+
+    function nxtSlide() {
+        img[currentSlide].style.display = 'none';
+        currentSlide = (currentSlide === img.length - 1) ? 0 : currentSlide + 1;
+        img[currentSlide].style.display = 'block';
+    }
+
+    function prvSlide() {
+        img[currentSlide].style.display = 'none';
+        currentSlide = (currentSlide === 0) ? img.length - 1 : currentSlide - 1;
+        img[currentSlide].style.display = 'block';
+    }
+
+    $slider.querySelector('.previous').addEventListener('click', prvSlide);
+    $slider.querySelector('.next').addEventListener('click', nxtSlide);
+
+    img[currentSlide].style.display = 'block';
+}
+
+
+function close(e) {
+    if (e.key === 'Escape' || e.type === 'click')
+        $popup_gallery.style.display = 'none';
+}
+
+
+document.addEventListener('keydown', close);
+$close.addEventListener('click', close);
+
+
